@@ -1,10 +1,12 @@
-#include "rxcpp/rx.hpp"
+#include <rxcpp/rx.hpp>
 #include <chrono>
 #include <exception>
-#include <operators/rx-observe_on.hpp>
 #include <rx-observable.hpp>
 #include <rx-observer.hpp>
 #include <rx-subscriber.hpp>
+#include <rx-subscription.hpp>
+#include <thread>
+
 #include <thread>
 
 
@@ -45,6 +47,5 @@ int main()
     while(sub.is_subscribed()){
 
     }
-
     return 0;
 }

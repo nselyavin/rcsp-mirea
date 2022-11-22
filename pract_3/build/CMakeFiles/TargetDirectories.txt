@@ -1,0 +1,5 @@
+/home/fume/projects/rcsp-mirea/pract_3/build/CMakeFiles/edit_cache.dir
+/home/fume/projects/rcsp-mirea/pract_3/build/CMakeFiles/rebuild_cache.dir
+/home/fume/projects/rcsp-mirea/pract_3/build/task_4/CMakeFiles/task_4.dir
+/home/fume/projects/rcsp-mirea/pract_3/build/task_4/CMakeFiles/edit_cache.dir
+/home/fume/projects/rcsp-mirea/pract_3/build/task_4/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "exception": "cpp",
+        "chrono": "cpp",
+        "thread": "cpp"
+    }
+}

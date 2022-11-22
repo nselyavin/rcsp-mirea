@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/fume/projects/rcsp-mirea/pract_3/build",
+  "command": "/usr/bin/clang++ -isystem /usr/local/include/rxcpp -g -std=gnu++20 -o task_4/CMakeFiles/task_4.dir/main.cpp.o -c /home/fume/projects/rcsp-mirea/pract_3/task_4/main.cpp",
+  "file": "/home/fume/projects/rcsp-mirea/pract_3/task_4/main.cpp"
+}
+]

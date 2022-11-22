@@ -15,7 +15,7 @@ class FileHandler
 {
 public:
     FileHandler(File f){
-        std::this_thread::sleep_for(std::chrono::milliseconds(f.size() * 7));
+        std::this_thread::sleep_for(std::chrono::milliseconds(f.size() * 10));
         if(f.type() == "JSON"){
             json_handler(f);
         }

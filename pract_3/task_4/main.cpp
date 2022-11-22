@@ -19,43 +19,33 @@ int main(){
 
     auto source = generator.get_generator().publish();
 
-    std::cout << "main: " << std::this_thread::get_id() << std::endl;
-    source.subscribe([&files, &queue_mut](File file){
-        std::lock_guard lck(queue_mut);
-        if(files.size() < 5){
-            files.push(file);
-        } else {
-            std::cout << "Queue is overflow" << std::endl;
-        }
-    });
-
-    source.subscribe([&queue_mut, &files](auto){
-        File f;
-        {
+    {
+        std::cout << "main: " << std::this_thread::get_id() << std::endl;
+        source.subscribe([&files, &queue_mut](File file){
             std::lock_guard lck(queue_mut);
-            f = files.front();
-            files.pop();
-        }
+            if(files.size() < 5){
+                files.push(file);
+            } else {
+                std::cout << "Queue is overflow" << std::endl;
+            }
+        });
 
-        FileHandler h(f);
-    });
+        source.subscribe([&queue_mut, &files](auto){
+            File f;
+            {
+                std::lock_guard lck(queue_mut);
+                if(!files.empty()){
+                    f = files.front();
+                    files.pop();
+                }
+            }
+
+            FileHandler h(f);
+        });
+    }
+
 
     source.connect();
-    
-
-    // Generator generator;
-
-    // generator.get_generator(); 
-    
-    // file_source.subscribe(
-    //     [&files, &queue_mut](File v){
-    //         std::lock_guard lck(queue_mut);
-    //         files.push_back(v);
-    //     }
-    // );
-
-
-    // file_source.connect();
 
     return 0;
 }

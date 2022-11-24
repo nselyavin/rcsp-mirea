@@ -72,7 +72,8 @@ void part_3(){
 
 
 int main() {
-
+    part_1();
+    part_2();
     part_3();
     return 0;
 }

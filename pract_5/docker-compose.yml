@@ -1,0 +1,48 @@
+version: "3"
+
+volumes:
+  upload:
+
+services:
+  # upload:
+  #   image: alpine:latest
+  #   command: /bin/true
+  #   volumes:
+  #     - /upload
+
+  web-1:
+    # build: ./demo
+    image: spring-web
+    ports:
+      - "8081:8080"
+    container_name: dec-web-1
+    volumes:
+      - upload:/app/uploads
+
+  web-2:
+    # build: ./demo
+    image: spring-web
+    ports:
+      - "8082:8080"
+    container_name: dec-web-2
+    volumes:
+      - upload:/app/uploads
+
+  web-3:
+    # build: ./demo
+    image: spring-web
+    ports:
+      - "8083:8080"
+    container_name: dec-web-3
+    volumes:
+      - upload:/app/uploads
+
+  web-4:
+    # build: ./demo
+    image: spring-web
+    ports:
+      - "8084:8080"
+    container_name: dec-web-4
+    volumes:
+      - upload:/app/uploads
+  

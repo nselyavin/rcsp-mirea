@@ -6,7 +6,7 @@ contract SecPaper {
     address public owner;
     struct PaymentInfo{uint amount; uint value;}
 
-    mapping (address => PaymentInfo) public payments;
+    mapping (address => PaymentInfo) payments;
 
     constructor() {
         owner = msg.sender; // Кто контракт развернул, тот им и владеет

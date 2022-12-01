@@ -34,7 +34,6 @@ void part_2(){
     std::cout << "\n==== Part 2 ====\n";
     auto source_1 = rxcpp::observable<>::range<int>(1, 6);
 
-
     auto source_2 = rxcpp::observable<>::range<int>(7, 12);
 
     source_1.concat(source_2).subscribe(

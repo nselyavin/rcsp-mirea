@@ -1,64 +1,43 @@
+#include <condition_variable>
 #include <iostream>
-#include <rxcpp/rx.hpp>
-#include <rx-observable.hpp>
-#include <rx-observer.hpp>
+#include <mutex>
+#include <queue>
+#include <thread>
 #include <vector>
 
-class UserFriend{
-public:
-    UserFriend(int user_id, int friend_id): user_id(user_id), friend_id(friend_id){}
-    UserFriend(const UserFriend& other) = default;
-    
-    int get_user_id(){
-        return user_id;
-    }
+#include "File.h"
+#include "Generator.h"
+#include "Handler.h"
 
-    int get_friend_id(){
-        return friend_id;
-    }
+int main() {
+    std::condition_variable cond;
+    std::mutex file_mtx;
+    std::vector<File> file_pull;
+    Generator generator(file_pull, file_mtx, cond);
 
-private:
-    int user_id;
-    int friend_id;
-};
+    std::cout << "main: " << std::this_thread::get_id() << std::endl;
+    std::thread gen_t(generator);
 
+    std::thread hand_t([&file_mtx, &file_pull, &cond]{
+        while(true){
+            File file;
+            {
+                std::unique_lock<std::mutex> lck(file_mtx);
+                cond.wait(lck, [&file_pull]{
+                    return not file_pull.empty();
+                });
 
-auto get_friends(std::vector<UserFriend> arr, int user_id)
-{
+                // std::lock_guard lck_2(file_mtx);
+                file = file_pull.back();
+                file_pull.pop_back();
+            }
+            FileHandler handler(file);
 
-    rxcpp::observable source = rxcpp::observable<>::iterate(arr).filter([user_id](UserFriend user_friend){
-        return user_friend.get_user_id() == user_id; });
-    return std::move(source);
-}
-
-int main(){
-
-    std::vector<UserFriend> user_friends = {
-        {11, 12},
-        {11, 13},
-        {1312, 132},
-        {11, 1},
-        {3, 11}
-    };
-
-
-    std::cout << "User 11 friends: \n";
-    get_friends(user_friends, 11).subscribe([](UserFriend v){
-        std::cout << v.get_user_id() << " " << v.get_friend_id() << std::endl;
+        };
     });
 
-
-    std::vector<int> rand_user_id = {11, 12, 1, 5, 6, 3};
-    auto rand_user_id_source = rxcpp::observable<>::iterate(rand_user_id);
-
-    auto rand_user_id_friends = rand_user_id_source.concat_map([user_friends](int user_id){
-        return get_friends(user_friends, user_id);
-    });
-
-    std::cout << "Random user friends: \n";
-    rand_user_id_friends.subscribe([](UserFriend v){
-        std::cout << v.get_user_id() << " " << v.get_friend_id() << std::endl;
-    });
+    hand_t.join();
+    gen_t.join();
 
     return 0;
 }

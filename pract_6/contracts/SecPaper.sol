@@ -19,9 +19,11 @@ contract SecPaper {
     }
 
     function withdrawAll() public {
-        address payable _to = payable(owner);
-        address _thisContract = address(this);
-        _to.transfer(_thisContract.balance);
+        if(msg.sender == owner){
+            address payable _to = payable(owner);
+            address _thisContract = address(this);
+            _to.transfer(_thisContract.balance);
+        }
     }
 
     function currentBalance() public view returns(uint) {

@@ -3,77 +3,43 @@
     содержащий только числа больше 500.
 */
 
-#include <rxcpp/rx.hpp>
+#include <future>
 #include <iostream>
-#include <rx-observable.hpp>
-#include <rx-observer.hpp>
+#include <functional>
+#include <thread>
+#include <chrono>
+#include <cmath>
+#include <vector>
 
+void handle_input(int n){
+    int delay = rand()%4+1;
+    std::this_thread::sleep_for(std::chrono::seconds(delay));
 
-void part_1(){
-    std::cout << "\n==== Part 1 ====\n";
-    auto grand_stream = rxcpp::observable<>::range(0, 1000)
-    .map([](int v){return rand() % 1000;}).publish();
+    std::cout << std::this_thread::get_id() << ": n * 2 = " << pow(n, 2) << std::endl;
 
-
-    grand_stream.take(35)
-    .subscribe([](int v){
-        std::cout << "Original: " << v << " ";
-    });
-
-    auto half_grand_stream = grand_stream.filter([](int v){return v > 500;});
-    half_grand_stream.take(30).subscribe(
-        [](int v){
-            std::cout << "Filtered: " << v << " ";
-        }
-    );
-
-    grand_stream.connect();
+    return;
 }
-
-void part_2(){
-    std::cout << "\n==== Part 2 ====\n";
-    auto source_1 = rxcpp::observable<>::range<int>(1, 6);
-
-
-    auto source_2 = rxcpp::observable<>::range<int>(7, 12);
-
-    source_1.concat(source_2).subscribe(
-        [](int v){
-            std::cout << v << " ";
-        }
-    );
-
-}
-
-
-void part_3(){
-    std::cout << "\n==== Part 3 ====\n";
-    auto source_1 = rxcpp::observable<>::range<int>(1, 10);
-
-
-    source_1.subscribe(
-        [](int v){
-            std::cout << "Source 1 " << v << " ";
-        }
-    );
-
-    auto source_2 = source_1.take(5);
-
-    std::cout << std::endl;
-    source_2.subscribe(
-        [](int v){
-            std::cout << "Source 2 " << v << " ";
-        }
-    );
-
-
-}
-
-
 
 int main() {
-    part_1();
-    part_2();
-    part_3();
+    std::vector<std::future<void>> tasks;
+    
+    while(true){
+        int n;
+        std::cout << "Enter val> ";
+        std::cin >> n;
+        if(n == -1){
+            break;
+        }
+
+        std::packaged_task task(handle_input);
+        auto fut_1 = task.get_future();
+        tasks.push_back(std::move(fut_1));
+        std::thread t1(std::move(task), n);
+        t1.detach();
+    }
+
+    for (auto& fut : tasks){
+        fut.get();
+    }
     return 0;
 }

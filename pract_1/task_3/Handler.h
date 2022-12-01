@@ -1,12 +1,10 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
+#include <iostream>
 #include <thread>
 #include <vector>
 #include <functional>
-#include <rxcpp/rx.hpp>
-#include <rx-observable.hpp>
-#include <rx-observer.hpp>
 
 #include "File.h"
 
@@ -15,7 +13,7 @@ class FileHandler
 {
 public:
     FileHandler(File f){
-        std::this_thread::sleep_for(std::chrono::milliseconds(f.size() * 10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(f.size() * 100));
         if(f.type() == "JSON"){
             json_handler(f);
         }

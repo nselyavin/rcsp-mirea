@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <omp.h>
-
 #include <thread>
 
 using namespace std::literals::chrono_literals;

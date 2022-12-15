@@ -1,8 +1,8 @@
 #include <chrono>
 #include <iostream>
 #include <future>
-#include <thread>
 #include <omp.h>
+#include <thread>
 
 using namespace std::literals::chrono_literals;
 

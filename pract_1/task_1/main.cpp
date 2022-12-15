@@ -54,7 +54,7 @@ int async_find_max(int* arr, int n){
 
 
 int omp_find_max(int* arr, int n){
-    omp_set_num_threads(4);
+    omp_set_num_threads(2);
     int max = arr[0];
     int i = 0;
 
